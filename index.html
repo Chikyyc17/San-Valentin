@@ -287,20 +287,44 @@
             font-weight: 600;
         }
 
-        /* Sección del video - OPTIMIZADO PARA GITHUB */
-        .video-titulo {
-            color: #a4133c;
-            font-size: clamp(1rem, 3.5vw, 1.3rem);
-            margin: 15px 0 8px;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.7);
-            padding: 8px 20px;
+        /* Botón del regalo especial - NUEVO */
+        .regalo-especial {
+            background: linear-gradient(145deg, #ff4d6d, #a4133c);
+            color: white;
+            border: 3px solid white;
+            padding: clamp(15px, 4vw, 18px) clamp(25px, 6vw, 40px);
+            font-size: clamp(1.3rem, 5vw, 1.8rem);
             border-radius: 60px;
-            display: inline-block;
-            backdrop-filter: blur(5px);
-            border: 2px solid white;
+            cursor: pointer;
+            margin: 20px 0 15px;
+            font-weight: 700;
+            box-shadow: 0 8px 0 #590d22, 0 15px 25px rgba(164, 19, 60, 0.4);
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: brillo 2s infinite;
         }
 
+        @keyframes brillo {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 0 #590d22, 0 15px 25px rgba(164, 19, 60, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 8px 0 #590d22, 0 20px 35px rgba(164, 19, 60, 0.6); }
+        }
+
+        .regalo-especial:active {
+            transform: translateY(8px);
+            box-shadow: 0 2px 0 #590d22, 0 10px 20px rgba(164, 19, 60, 0.4);
+        }
+
+        .regalo-espanol {
+            font-size: clamp(1rem, 4vw, 1.4rem);
+        }
+
+        /* Contenedor del video - Oculto inicialmente */
         .video-container {
             width: 100%;
             max-width: 500px;
@@ -308,13 +332,21 @@
             border-radius: 40px;
             overflow: hidden;
             box-shadow: 0 15px 30px rgba(164, 19, 60, 0.3), 0 0 0 4px #ffffff, 0 0 0 10px #ff4d6d;
-            animation: aparecerVideo 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
             background: #000;
+            display: none; /* OCULTO INICIALMENTE */
+            transform: scale(0.3);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .video-container.mostrar {
+            display: block;
+            animation: aparecerVideo 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         @keyframes aparecerVideo {
             0% { 
-                transform: scale(0.3) translateY(100px); 
+                transform: scale(0.3) translateY(50px); 
                 opacity: 0; 
             }
             100% { 
@@ -331,6 +363,13 @@
             aspect-ratio: 16/9;
             object-fit: cover;
             background: #000;
+        }
+
+        .video-titulo {
+            color: #a4133c;
+            font-size: clamp(1rem, 3.5vw, 1.3rem);
+            margin: 5px 0;
+            font-weight: 600;
         }
 
         .volver-btn {
@@ -357,7 +396,7 @@
             box-shadow: 0 2px 0 #2d0a14, 0 5px 12px rgba(0,0,0,0.2);
         }
 
-        /* Mensaje de error para el video */
+        /* Mensaje de error */
         .video-error {
             background: #ff4d6d;
             color: white;
@@ -399,7 +438,7 @@
         </div>
     </div>
 
-    <!-- Pantalla 2: Mensaje con nombres y video -->
+    <!-- Pantalla 2: Mensaje con nombres y regalo especial -->
     <div id="pantalla-mensaje">
         <div class="carta">
             <h2>💝 PARA MIS EFEMITOOOS 💝</h2>
@@ -430,20 +469,22 @@
             </div>
         </div>
 
-        <!-- Video OPTIMIZADO para GitHub - WebM primero -->
-        <div class="video-titulo">🎬 Un regalo especial para ustedes 🎬</div>
-        <div class="video-container">
+        <!-- BOTÓN DEL REGALO ESPECIAL - Se toca aquí para ver el video -->
+        <div class="regalo-especial" id="btnRegalo" onclick="mostrarVideo()">
+            <span>🎬</span>
+            <span class="regalo-espanol">Un regalo especial para ustedes</span>
+            <span>✨</span>
+        </div>
+
+        <!-- Contenedor del video - OCULTO hasta tocar el botón -->
+        <div id="videoContainer" class="video-container">
             <video id="valentinVideo" controls playsinline preload="auto" style="width:100%;">
-                <!-- WebM - Más ligero, carga rápido en GitHub -->
+                <!-- WebM - Más ligero -->
                 <source src="valentinvideo.webm" type="video/webm">
-                
-                <!-- MP4 - Compatibilidad universal (opcional) -->
-                <!-- <source src="valentinvideo.mp4" type="video/mp4"> -->
                 
                 <!-- Mensaje si no carga -->
                 <div class="video-error">
-                    ⚠️ No se pudo cargar el video<br>
-                    Asegúrate que el archivo <b>valentinvideo.webm</b> esté en la misma carpeta
+                    ⚠️ No se pudo cargar el video
                 </div>
             </video>
         </div>
@@ -457,7 +498,9 @@
         // Variables
         const pantallaInicio = document.getElementById('pantalla-inicio');
         const pantallaMensaje = document.getElementById('pantalla-mensaje');
+        const videoContainer = document.getElementById('videoContainer');
         const valentinVideo = document.getElementById('valentinVideo');
+        const btnRegalo = document.getElementById('btnRegalo');
         let intervaloCorazones;
         let intervaloMensaje;
 
@@ -505,6 +548,37 @@
             }
         }
 
+        // NUEVA FUNCIÓN - Mostrar video al tocar el regalo
+        function mostrarVideo() {
+            // Animación del botón
+            btnRegalo.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                btnRegalo.style.transform = '';
+            }, 200);
+            
+            // Mostrar el contenedor del video
+            videoContainer.classList.add('mostrar');
+            
+            // Opcional: Hacer scroll suave hacia el video
+            setTimeout(() => {
+                videoContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+            
+            // Crear corazones de celebración
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const corazonExtra = document.createElement('div');
+                    corazonExtra.className = 'corazon-cayendo';
+                    corazonExtra.innerHTML = '🎁';
+                    corazonExtra.style.left = Math.random() * 100 + '%';
+                    corazonExtra.style.fontSize = '30px';
+                    corazonExtra.style.animationDuration = '3s';
+                    document.body.appendChild(corazonExtra);
+                    setTimeout(() => corazonExtra.remove(), 3000);
+                }, i * 100);
+            }
+        }
+
         function irAlMensaje() {
             detenerLluviaCorazones();
             pantallaInicio.style.opacity = '0';
@@ -513,12 +587,11 @@
                 pantallaInicio.style.display = 'none';
                 pantallaMensaje.style.display = 'flex';
                 
-                // Pausar cualquier video si estaba reproduciéndose
+                // Ocultar video y resetear
+                videoContainer.classList.remove('mostrar');
                 if (valentinVideo) {
                     valentinVideo.pause();
                     valentinVideo.currentTime = 0;
-                    // Forzar recarga del video
-                    valentinVideo.load();
                 }
                 
                 document.querySelectorAll('.corazon-cayendo').forEach(c => c.remove());
@@ -537,7 +610,8 @@
                 clearInterval(intervaloMensaje);
             }
             
-            // Pausar video al volver
+            // Ocultar video y pausar
+            videoContainer.classList.remove('mostrar');
             if (valentinVideo) {
                 valentinVideo.pause();
                 valentinVideo.currentTime = 0;
@@ -561,17 +635,6 @@
 
         window.addEventListener('load', () => {
             iniciarLluviaCorazones();
-            
-            // Verificar si el video cargó
-            if (valentinVideo) {
-                valentinVideo.addEventListener('error', function() {
-                    console.log('Error al cargar el video');
-                });
-                
-                valentinVideo.addEventListener('loadeddata', function() {
-                    console.log('Video cargado correctamente');
-                });
-            }
             
             const volverBtn = document.querySelector('.volver-btn');
             volverBtn.addEventListener('click', (e) => {
@@ -621,7 +684,7 @@
         });
 
         // Prevenir scroll
-        document.querySelectorAll('.nombre, .volver-btn, #pantalla-inicio').forEach(el => {
+        document.querySelectorAll('.nombre, .volver-btn, #pantalla-inicio, .regalo-especial').forEach(el => {
             el.addEventListener('touchstart', (e) => {
                 e.preventDefault();
             }, { passive: false });
