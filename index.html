@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💝 Para mis Amigos del Alma 💝</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 50%, #ffe4e1 100%);
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Fondo con corazones fijos */
+        .fondo-corazones {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .fondo-corazon {
+            position: absolute;
+            color: rgba(255, 105, 180, 0.15);
+            font-size: 60px;
+            animation: flotarFondo 20s infinite linear;
+        }
+
+        @keyframes flotarFondo {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Tarjeta principal */
+        .tarjeta {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 60px 60px 60px 60px;
+            box-shadow: 
+                0 20px 50px rgba(255, 20, 147, 0.3),
+                0 0 0 5px #fff,
+                0 0 0 10px #ffb6c1;
+            text-align: center;
+            max-width: 800px;
+            margin: 30px;
+            z-index: 10;
+            position: relative;
+            animation: aparecerTarjeta 1.5s ease-out;
+            border: 2px solid white;
+        }
+
+        @keyframes aparecerTarjeta {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Decoración de cinta */
+        .cinta {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff1493;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4);
+            white-space: nowrap;
+            border: 2px solid white;
+        }
+
+        .cinta:before, .cinta:after {
+            content: "💝";
+            margin: 0 10px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: #ff1493;
+            margin: 30px 0 10px;
+            text-shadow: 
+                3px 3px 0 #ffe4e1,
+                6px 6px 0 rgba(255, 20, 147, 0.2);
+            font-family: 'Brush Script MT', cursive;
+            letter-spacing: 2px;
+        }
+
+        .mensaje-especial {
+            font-size: 2.2rem;
+            color: #db7090;
+            margin: 20px 0;
+            font-style: italic;
+            font-weight: 300;
+            border-bottom: 3px dashed #ffb6c1;
+            border-top: 3px dashed #ffb6c1;
+            padding: 20px;
+            line-height: 1.4;
+        }
+
+        /* Contenedor de nombres */
+        .nombres-container {
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .nombres-titulo {
+            font-size: 2rem;
+            color: #c71585;
+            margin-bottom: 25px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .lista-nombres {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff0f5, #ffe4e1);
+            border-radius: 70px;
+            border: 3px solid white;
+            box-shadow: inset 0 0 20px rgba(255, 105, 180, 0.2);
+        }
+
+        .nombre {
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            box-shadow: 
+                0 5px 0 #c71585,
+                0 10px 20px rgba(255, 20, 147, 0.3);
+            transition: all 0.3s ease;
+            border: 2px solid white;
+            position: relative;
+            animation: bailar 4s infinite ease-in-out;
+        }
+
+        @keyframes bailar {
+            0%, 100% { transform: rotate(0deg) translateY(0); }
+            25% { transform: rotate(2deg) translateY(-5px); }
+            75% { transform: rotate(-2deg) translateY(-5px); }
+        }
+
+        .nombre:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 8px 0 #c71585, 0 15px 30px rgba(255, 20, 147, 0.4);
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+        }
+
+        .nombre:after {
+            content: "💕";
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            font-size: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .nombre:hover:after {
+            opacity: 1;
+        }
+
+        .mensaje-grande {
+            font-size: 1.6rem;
+            color: #8b4513;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 228, 225, 0.7);
+            border-radius: 40px;
+            line-height: 1.8;
+            border-left: 10px solid #ff69b4;
+            border-right: 10px solid #ff69b4;
+            font-family: 'Georgia', serif;
+        }
+
+        .firma {
+            font-size: 2.2rem;
+            color: #ff1493;
+            margin-top: 20px;
+            font-family: 'Brush Script MT', cursive;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            border-top: 3px solid #ffb6c1;
+            padding-top: 20px;
+        }
+
+        /* Corazones voladores */
+        .corazon-volador {
+            position: fixed;
+            font-size: 30px;
+            user-select: none;
+            pointer-events: none;
+            z-index: 9999;
+            animation: volarCorazon linear forwards;
+            filter: drop-shadow(0 0 10px rgba(255, 20, 147, 0.5));
+        }
+
+        @keyframes volarCorazon {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.5);
+                opacity: 1;
+            }
+            25% {
+                transform: translateY(75vh) translateX(25px) rotate(90deg) scale(0.8);
+            }
+            50% {
+                transform: translateY(50vh) translateX(-25px) rotate(180deg) scale(1);
+            }
+            75% {
+                transform: translateY(25vh) translateX(25px) rotate(270deg) scale(0.8);
+            }
+            100% {
+                transform: translateY(-20vh) translateX(0) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .btn-magia {
+            background: linear-gradient(45deg, #ff1493, #ff69b4);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.8rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 30px 0 10px;
+            border: 3px solid white;
+            box-shadow: 0 10px 0 #c71585, 0 15px 30px rgba(255, 20, 147, 0.3);
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-magia:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 0 #c71585, 0 20px 40px rgba(255, 20, 147, 0.4);
+        }
+
+        .btn-magia:active {
+            transform: translateY(5px);
+            box-shadow: 0 5px 0 #c71585, 0 15px 30px rgba(255, 20, 147, 0.3);
+        }
+
+        .btn-magia:before {
+            content: "✨";
+            margin-right: 15px;
+            font-size: 2rem;
+        }
+
+        .btn-magia:after {
+            content: "✨";
+            margin-left: 15px;
+            font-size: 2rem;
+        }
+
+        .contador-corazones {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-size: 1.2rem;
+            color: #ff1493;
+            z-index: 100;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fondo con corazones -->
+    <div class="fondo-corazones" id="fondoCorazones"></div>
+
+    <!-- Tarjeta principal -->
+    <div class="tarjeta">
+        <div class="cinta">💝 San Valentín 2026 💝</div>
+        
+        <h1>Mis Amores</h1>
+        
+        <div class="mensaje-especial">
+            "Los amigos son la familia que elegimos"
+        </div>
+
+        <!-- Nombres de amigos -->
+        <div class="nombres-container">
+            <div class="nombres-titulo">💕 Para ustedes 💕</div>
+            <div class="lista-nombres" id="listaNombres">
+                <!-- Puedes editar estos nombres -->
+                <span class="nombre">Ana Sofía</span>
+                <span class="nombre">Carlos David</span>
+                <span class="nombre">Lucía Elena</span>
+                <span class="nombre">Miguel Ángel</span>
+                <span class="nombre">Valentina Paz</span>
+                <span class="nombre">Andrés Felipe</span>
+                <span class="nombre">María José</span>
+                <span class="nombre">Juan Diego</span>
+                <span class="nombre">Camila Andrea</span>
+                <span class="nombre">Daniel Felipe</span>
+                <span class="nombre">Isabella Sofía</span>
+                <span class="nombre">Santiago José</span>
+            </div>
+        </div>
+
+        <!-- Mensaje bonito -->
+        <div class="mensaje-grande">
+            "Gracias por cada risa, cada abrazo,<br>
+            por los momentos inolvidables y por estar siempre ahí.<br>
+            Su amistad es el regalo más hermoso que la vida me ha dado.<br>
+            💕 ¡Los quiero muchísimo! 💕"
+        </div>
+
+        <!-- Botón mágico -->
+        <button class="btn-magia" onclick="lluviaMagica()">
+            ¡Haz magia!
+        </button>
+
+        <div class="firma">
+            Con todo mi cariño,<br>
+            Tu amiga(o) que los adora 💝
+        </div>
+    </div>
+
+    <!-- Contador de corazones -->
+    <div class="contador-corazones" id="contador">
+        💕 Corazones volando: <span id="numeroCorazones">0</span>
+    </div>
+
+    <script>
+        // Variables para el contador
+        let totalCorazones = 0;
+        const contadorSpan = document.getElementById('numeroCorazones');
+
+        // Crear fondo de corazones
+        function crearFondoCorazones() {
+            const fondo = document.getElementById('fondoCorazones');
+            for (let i = 0; i < 20; i++) {
+                const corazon = document.createElement('div');
+                corazon.className = 'fondo-corazon';
+                corazon.innerHTML = ['❤️', '💖', '💗', '💓', '💕', '💞'][Math.floor(Math.random() * 6)];
+                corazon.style.left = Math.random() * 100 + '%';
+                corazon.style.fontSize = (Math.random() * 80 + 40) + 'px';
+                corazon.style.animationDelay = Math.random() * 15 + 's';
+                corazon.style.animationDuration = (Math.random() * 15 + 15) + 's';
+                fondo.appendChild(corazon);
+            }
+        }
+
+        // Función para crear un corazón volador
+        function crearCorazonVolador(origenMouse = false, x = null, y = null) {
+            const corazon = document.createElement('div');
+            corazon.className = 'corazon-volador';
+            
+            // Diferentes tipos de corazones
+            const corazones = ['❤️', '💖', '💗', '💓', '💕', '💞', '💝', '💘', '💟', '💌'];
+            const tamano = Math.floor(Math.random() * 40) + 20;
+            
+            corazon.innerHTML = corazones[Math.floor(Math.random() * corazones.length)];
+            corazon.style.fontSize = tamano + 'px';
+            
+            // Posición horizontal aleatoria
+            if (origenMouse && x && y) {
+                corazon.style.left = x + 'px';
+                corazon.style.top = y + 'px';
+                corazon.style.animation = 'volarCorazon 3s ease-out forwards';
+            } else {
+                corazon.style.left = Math.random() * 100 + '%';
+                corazon.style.animation = `volarCorazon ${Math.random() * 4 + 3}s ease-out forwards`;
+            }
+            
+            // Rotación aleatoria
+            corazon.style.transform = `rotate(${Math.random() * 360}deg)`;
+            
+            document.body.appendChild(corazon);
+            
+            // Actualizar contador
+            totalCorazones++;
+            contadorSpan.textContent = totalCorazones;
+            
+            // Eliminar después de la animación
+            setTimeout(() => {
+                corazon.remove();
+            }, 6000);
+        }
+
+        // Lluvia mágica de corazones
+        function lluviaMagica() {
+            // Crear muchos corazones
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    crearCorazonVolador();
+                    
+                    // Efecto de vibración en los nombres
+                    const nombres = document.querySelectorAll('.nombre');
+                    nombres.forEach((nombre, index) => {
+                        setTimeout(() => {
+                            nombre.style.transform = 'scale(1.2) rotate(5deg)';
+                            setTimeout(() => {
+                                nombre.style.transform = '';
+                            }, 200);
+                        }, index * 50);
+                    });
+                }, i * 80);
+            }
+            
+            // Cambiar colores temporalmente
+            document.body.style.background = 'linear-gradient(135deg, #ff69b4, #ffb6c1, #ffe4e1)';
+            setTimeout(() => {
+                document.body.style.background = 'linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 50%, #ffe4e1 100%)';
+            }, 1000);
+            
+            // Hacer brillar la tarjeta
+            const tarjeta = document.querySelector('.tarjeta');
+            tarjeta.style.boxShadow = '0 0 50px #ff1493, 0 0 100px #ff69b4';
+            setTimeout(() => {
+                tarjeta.style.boxShadow = '0 20px 50px rgba(255, 20, 147, 0.3), 0 0 0 5px #fff, 0 0 0 10px #ffb6c1';
+            }, 500);
+        }
+
+        // Crear corazones con el movimiento del mouse
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() < 0.1) { // 10% de probabilidad
+                crearCorazonVolador(true, e.clientX, e.clientY);
+            }
+        });
+
+        // Crear corazones cada cierto tiempo
+        setInterval(() => {
+            if (totalCorazones < 100) { // Límite para no sobrecargar
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(crearCorazonVolador, i * 200);
+                }
+            }
+        }, 3000);
+
+        // Inicializar fondo de corazones
+        crearFondoCorazones();
+
+        // Crear corazones al cargar la página
+        window.addEventListener('load', () => {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(crearCorazonVolador, i * 200);
+            }
+        });
+
+        // Hacer click en los nombres para más corazones
+        document.querySelectorAll('.nombre').forEach(nombre => {
+            nombre.addEventListener('click', function() {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(crearCorazonVolador, i * 100);
+                }
+                this.style.animation = 'none';
+                this.offsetHeight;
+                this.style.animation = 'bailar 4s infinite ease-in-out';
+            });
+        });
+
+        // Mensaje especial en consola
+        console.log('%c💝 Feliz San Valentín, amigos queridos! 💝', 'color: #ff1493; font-size: 20px; font-weight: bold;');
+    </script>
+</body>
+</html>
