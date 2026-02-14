@@ -287,11 +287,24 @@
             font-weight: 600;
         }
 
-        /* Sección del video */
+        /* Sección del video - OPTIMIZADO PARA GITHUB */
+        .video-titulo {
+            color: #a4133c;
+            font-size: clamp(1rem, 3.5vw, 1.3rem);
+            margin: 15px 0 8px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 8px 20px;
+            border-radius: 60px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            border: 2px solid white;
+        }
+
         .video-container {
             width: 100%;
             max-width: 500px;
-            margin-top: 10px;
+            margin: 5px 0 10px;
             border-radius: 40px;
             overflow: hidden;
             box-shadow: 0 15px 30px rgba(164, 19, 60, 0.3), 0 0 0 4px #ffffff, 0 0 0 10px #ff4d6d;
@@ -317,19 +330,7 @@
             border-radius: 35px;
             aspect-ratio: 16/9;
             object-fit: cover;
-        }
-
-        .video-titulo {
-            color: #a4133c;
-            font-size: clamp(1rem, 3.5vw, 1.3rem);
-            margin: 8px 0 5px;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.7);
-            padding: 5px 15px;
-            border-radius: 60px;
-            display: inline-block;
-            backdrop-filter: blur(5px);
-            border: 2px solid white;
+            background: #000;
         }
 
         .volver-btn {
@@ -354,6 +355,16 @@
         .volver-btn:active {
             transform: translateY(5px);
             box-shadow: 0 2px 0 #2d0a14, 0 5px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Mensaje de error para el video */
+        .video-error {
+            background: #ff4d6d;
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 1rem;
         }
 
         /* Optimización para iOS */
@@ -419,12 +430,21 @@
             </div>
         </div>
 
-        <!-- Video con animación de entrada -->
+        <!-- Video OPTIMIZADO para GitHub - WebM primero -->
         <div class="video-titulo">🎬 Un regalo especial para ustedes 🎬</div>
         <div class="video-container">
-            <video id="valentinVideo" controls playsinline preload="auto">
-                <source src="valentinvideo.mp4" type="video/mp4">
-                Tu navegador no soporta el video.
+            <video id="valentinVideo" controls playsinline preload="auto" style="width:100%;">
+                <!-- WebM - Más ligero, carga rápido en GitHub -->
+                <source src="valentinvideo.webm" type="video/webm">
+                
+                <!-- MP4 - Compatibilidad universal (opcional) -->
+                <!-- <source src="valentinvideo.mp4" type="video/mp4"> -->
+                
+                <!-- Mensaje si no carga -->
+                <div class="video-error">
+                    ⚠️ No se pudo cargar el video<br>
+                    Asegúrate que el archivo <b>valentinvideo.webm</b> esté en la misma carpeta
+                </div>
             </video>
         </div>
         
@@ -497,6 +517,8 @@
                 if (valentinVideo) {
                     valentinVideo.pause();
                     valentinVideo.currentTime = 0;
+                    // Forzar recarga del video
+                    valentinVideo.load();
                 }
                 
                 document.querySelectorAll('.corazon-cayendo').forEach(c => c.remove());
@@ -540,9 +562,15 @@
         window.addEventListener('load', () => {
             iniciarLluviaCorazones();
             
-            // Precargar video pero no reproducir automáticamente
+            // Verificar si el video cargó
             if (valentinVideo) {
-                valentinVideo.load();
+                valentinVideo.addEventListener('error', function() {
+                    console.log('Error al cargar el video');
+                });
+                
+                valentinVideo.addEventListener('loadeddata', function() {
+                    console.log('Video cargado correctamente');
+                });
             }
             
             const volverBtn = document.querySelector('.volver-btn');
