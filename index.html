@@ -133,7 +133,6 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            height: -webkit-fill-available;
             background: linear-gradient(145deg, #ffe5ec, #ffc8dd, #ffb5b5);
             display: none;
             flex-direction: column;
@@ -285,13 +284,15 @@
             font-weight: 600;
         }
 
-        /* SOBRE ANIMADO (NUEVO) */
+        /* SOBRE ANIMADO */
         .sobre-container {
             width: 100%;
             max-width: 500px;
             margin: 15px auto;
             cursor: pointer;
             perspective: 1000px;
+            position: relative;
+            z-index: 10;
         }
 
         .sobre {
@@ -300,9 +301,8 @@
             padding: 20px;
             box-shadow: 0 15px 0 #a4133c, 0 20px 30px rgba(0,0,0,0.3);
             position: relative;
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
             border: 4px solid white;
-            transform-style: preserve-3d;
         }
 
         .sobre::before {
@@ -314,7 +314,6 @@
             font-size: 50px;
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
             z-index: 10;
-            transition: all 0.5s ease;
         }
 
         .sobre::after {
@@ -325,7 +324,6 @@
             font-size: 45px;
             transform: rotate(15deg);
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
-            transition: all 0.5s ease;
         }
 
         .sobre-front {
@@ -349,22 +347,8 @@
             border: 2px dashed white;
         }
 
-        /* Sobre ABIERTO (animación) */
-        .sobre.abierto {
-            transform: rotateX(5deg) scale(0.95);
-            background: #ff8fab;
-            box-shadow: 0 5px 0 #a4133c, 0 15px 25px rgba(0,0,0,0.3);
-        }
-
-        .sobre.abierto::before {
-            content: "✨";
-            top: -30px;
-            font-size: 60px;
-        }
-
-        .sobre.abierto::after {
-            content: "🎬";
-            font-size: 55px;
+        .sobre:active {
+            transform: scale(0.97);
         }
 
         .volver-btn {
@@ -384,6 +368,8 @@
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
+            z-index: 10;
         }
 
         .volver-btn:active {
@@ -450,16 +436,6 @@
                 height: -webkit-fill-available;
             }
         }
-
-        @media (max-width: 350px) {
-            .nombre {
-                padding: 8px 15px;
-                font-size: 1.3rem;
-            }
-            .carta {
-                padding: 15px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -506,193 +482,126 @@
             </div>
         </div>
 
-        <!-- SOBRE ANIMADO - TOCAR PARA VIDEO FULLSCREEN -->
-        <div class="sobre-container" id="sobreContainer" onclick="abrirVideoCompleto()">
+        <!-- SOBRE ANIMADO - TOTALMENTE SEPARADO -->
+        <div class="sobre-container" id="sobreParaVideo">
             <div class="sobre" id="sobre">
                 <div class="sobre-front">
                     <h3>🎁 REGALO ESPECIAL</h3>
-                    <p>✨ Toca el sobre para ver el video ✨</p>
+                    <p>✨ Toca aquí para ver el video ✨</p>
                 </div>
             </div>
         </div>
         
-        <button class="volver-btn" onclick="volverAlInicio()">
+        <button class="volver-btn" id="btnVolver">
             💫 Volver al inicio 💫
         </button>
     </div>
 
     <!-- Pantalla de video en FULLSCREEN -->
     <div id="pantalla-video-full">
-        <div class="cerrar-video" onclick="cerrarVideo()">
+        <div class="cerrar-video" id="cerrarVideoBtn">
             ✕ Cerrar video
         </div>
         <div class="video-full-container">
-            <video id="videoFull" controls autoplay playsinline webkit-playsinline>
+            <video id="videoFull" controls playsinline webkit-playsinline>
                 <source src="valentinvideo.webm" type="video/webm">
                 <source src="valentinvideo.mp4" type="video/mp4">
-                <div style="color:white; text-align:center; padding:20px;">
-                    ⚠️ No se pudo cargar el video
-                </div>
+                Tu navegador no soporta el video.
             </video>
         </div>
     </div>
 
     <script>
-        // Variables
+        // Elementos
         const pantallaInicio = document.getElementById('pantalla-inicio');
         const pantallaMensaje = document.getElementById('pantalla-mensaje');
         const pantallaVideoFull = document.getElementById('pantalla-video-full');
         const videoFull = document.getElementById('videoFull');
-        const sobre = document.getElementById('sobre');
+        const sobreParaVideo = document.getElementById('sobreParaVideo');
+        const btnVolver = document.getElementById('btnVolver');
+        const cerrarVideoBtn = document.getElementById('cerrarVideoBtn');
+        
         let intervaloCorazones;
-        let intervaloMensaje;
 
         // Función para crear corazones
         function crearCorazon() {
             const corazon = document.createElement('div');
             corazon.className = 'corazon-cayendo';
-            
-            const simbolos = ['❤️', '💕', '💗', '💓', '💖', '💘', '💝', '🫶', '🌸', '✨', '💫', '⭐', '🌷', '🎀', '💞'];
+            const simbolos = ['❤️', '💕', '💗', '💓', '💖', '💘', '💝', '🫶', '🌸', '✨'];
             corazon.innerHTML = simbolos[Math.floor(Math.random() * simbolos.length)];
-            
             corazon.style.left = Math.random() * 100 + '%';
-            corazon.style.fontSize = (Math.floor(Math.random() * 35) + 18) + 'px';
-            corazon.style.animationDuration = (Math.random() * 5 + 3) + 's';
-            corazon.style.opacity = Math.random() * 0.7 + 0.3;
-            corazon.style.transform = `rotate(${Math.random() * 360}deg)`;
-            
+            corazon.style.fontSize = (Math.floor(Math.random() * 30) + 20) + 'px';
+            corazon.style.animationDuration = (Math.random() * 4 + 3) + 's';
             document.body.appendChild(corazon);
-            
-            setTimeout(() => {
-                if (corazon.parentNode) {
-                    corazon.remove();
-                }
-            }, 8000);
+            setTimeout(() => corazon.remove(), 7000);
         }
 
-        function iniciarLluviaCorazones() {
+        function iniciarCorazones() {
             if (intervaloCorazones) clearInterval(intervaloCorazones);
-            intervaloCorazones = setInterval(crearCorazon, 150);
-            
-            for (let i = 0; i < 30; i++) {
-                setTimeout(crearCorazon, i * 60);
-            }
+            intervaloCorazones = setInterval(crearCorazon, 180);
+            for (let i = 0; i < 15; i++) setTimeout(crearCorazon, i * 80);
         }
 
-        function detenerLluviaCorazones() {
+        function detenerCorazones() {
             if (intervaloCorazones) {
                 clearInterval(intervaloCorazones);
                 intervaloCorazones = null;
             }
         }
 
-        // Ir al mensaje
-        function irAlMensaje() {
-            detenerLluviaCorazones();
+        // Ir a pantalla de mensaje (desde inicio)
+        pantallaInicio.addEventListener('click', function(e) {
+            e.stopPropagation();
+            detenerCorazones();
             pantallaInicio.style.opacity = '0';
             
             setTimeout(() => {
                 pantallaInicio.style.display = 'none';
                 pantallaMensaje.style.display = 'flex';
-                
                 document.querySelectorAll('.corazon-cayendo').forEach(c => c.remove());
-                
-                // Resetear sobre
-                sobre.classList.remove('abierto');
-                
-                if (intervaloMensaje) clearInterval(intervaloMensaje);
-                intervaloMensaje = setInterval(() => {
-                    if (pantallaMensaje.style.display === 'flex') {
-                        crearCorazon();
-                    }
-                }, 180);
-            }, 800);
-        }
+                iniciarCorazones();
+            }, 500);
+        });
 
-        // FUNCIÓN PARA ABRIR VIDEO EN PANTALLA COMPLETA
-        function abrirVideoCompleto() {
-            // Animación del sobre
-            sobre.classList.add('abierto');
+        // ABRIR VIDEO - Solo el sobre
+        sobreParaVideo.addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
             
-            // Crear explosión de regalos
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const c = document.createElement('div');
-                    c.className = 'corazon-cayendo';
-                    c.innerHTML = '🎬';
-                    c.style.left = '50%';
-                    c.style.fontSize = '40px';
-                    c.style.animation = 'caer 2s linear forwards';
-                    document.body.appendChild(c);
-                    setTimeout(() => c.remove(), 2000);
-                }, i * 50);
-            }
-            
-            // Pequeña pausa para mostrar la animación
+            // Pequeña animación
+            this.style.transform = 'scale(0.95)';
             setTimeout(() => {
-                // Mostrar pantalla de video FULLSCREEN
-                pantallaVideoFull.style.display = 'flex';
-                
-                // Forzar reproducción del video
-                videoFull.play().catch(e => {
-                    console.log('Error al reproducir automáticamente:', e);
-                });
-                
-                // Intentar bloquear orientación (opcional)
-                if (screen.orientation && screen.orientation.lock) {
-                    screen.orientation.lock('portrait').catch(() => {});
-                }
-            }, 300);
-        }
+                this.style.transform = '';
+            }, 200);
+            
+            // Mostrar pantalla de video
+            pantallaVideoFull.style.display = 'flex';
+            
+            // Reproducir video
+            setTimeout(() => {
+                videoFull.play().catch(err => console.log('Error reproduciendo:', err));
+            }, 100);
+        });
 
         // Cerrar video
-        function cerrarVideo() {
+        cerrarVideoBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
             videoFull.pause();
             videoFull.currentTime = 0;
             pantallaVideoFull.style.display = 'none';
-        }
+        });
 
         // Volver al inicio
-        function volverAlInicio() {
-            if (intervaloMensaje) {
-                clearInterval(intervaloMensaje);
-            }
-            
-            // Cerrar video si está abierto
-            cerrarVideo();
-            
-            // Resetear sobre
-            sobre.classList.remove('abierto');
+        btnVolver.addEventListener('click', function(e) {
+            e.stopPropagation();
+            detenerCorazones();
+            document.querySelectorAll('.corazon-cayendo').forEach(c => c.remove());
             
             pantallaMensaje.style.display = 'none';
             pantallaInicio.style.display = 'flex';
             pantallaInicio.style.opacity = '1';
             
-            document.querySelectorAll('.corazon-cayendo').forEach(c => c.remove());
-            
-            iniciarLluviaCorazones();
-        }
-
-        // Eventos para la pantalla de inicio
-        pantallaInicio.addEventListener('click', irAlMensaje);
-        pantallaInicio.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            irAlMensaje();
-        });
-
-        window.addEventListener('load', () => {
-            iniciarLluviaCorazones();
-            videoFull.load();
-            
-            const volverBtn = document.querySelector('.volver-btn');
-            volverBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                volverAlInicio();
-            });
-            volverBtn.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-                volverAlInicio();
-            });
+            iniciarCorazones();
         });
 
         // Efecto en nombres
@@ -700,42 +609,25 @@
             nombre.addEventListener('click', function(e) {
                 e.stopPropagation();
                 
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 8; i++) {
                     setTimeout(() => {
-                        const corazonExtra = document.createElement('div');
-                        corazonExtra.className = 'corazon-cayendo';
-                        corazonExtra.innerHTML = '💕';
-                        corazonExtra.style.left = (e.clientX || window.innerWidth/2) + (Math.random() * 120 - 60) + 'px';
-                        corazonExtra.style.fontSize = '22px';
-                        corazonExtra.style.animationDuration = '1.8s';
-                        document.body.appendChild(corazonExtra);
-                        
-                        setTimeout(() => corazonExtra.remove(), 2000);
-                    }, i * 25);
+                        const c = document.createElement('div');
+                        c.className = 'corazon-cayendo';
+                        c.innerHTML = '💕';
+                        c.style.left = (e.clientX || window.innerWidth/2) + (Math.random() * 80 - 40) + 'px';
+                        c.style.fontSize = '22px';
+                        c.style.animationDuration = '1.8s';
+                        document.body.appendChild(c);
+                        setTimeout(() => c.remove(), 1800);
+                    }, i * 30);
                 }
-                
-                this.style.transform = 'scale(1.2) rotate(3deg)';
-                this.style.background = 'linear-gradient(145deg, #ffb5b5, #ff4d6d)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                    this.style.background = '';
-                }, 200);
-            });
-            
-            nombre.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const touch = e.touches[0];
-                const fakeEvent = { clientX: touch.clientX };
-                nombre.click(fakeEvent);
             });
         });
 
-        // Prevenir scroll
-        document.querySelectorAll('.nombre, .volver-btn, #pantalla-inicio, .sobre-container').forEach(el => {
-            el.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-            }, { passive: false });
+        // Iniciar
+        window.addEventListener('load', () => {
+            iniciarCorazones();
+            videoFull.load();
         });
 
         // Ajustar altura
@@ -745,15 +637,9 @@
             pantallaMensaje.style.height = altura;
             pantallaVideoFull.style.height = altura;
         }
-
         window.addEventListener('resize', ajustarAltura);
         window.addEventListener('orientationchange', ajustarAltura);
         ajustarAltura();
-
-        console.log('%c💕 Para mis efemitooos: Nabyyy, Maiaa, Javier, Tatto, Adriana 💕', 
-                    'color: #ff4d6d; font-size: 14px; font-weight: bold;');
-        console.log('%cCon cariño, Chikyy Joce ✨', 
-                    'color: #a4133c; font-size: 13px;');
     </script>
 </body>
 </html>
